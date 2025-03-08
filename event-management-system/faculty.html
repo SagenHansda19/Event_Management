@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Dashboard</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Faculty Dashboard</h1>
+        <nav>
+            <ul>
+                <li><a href="faculty.html">Attendance Management</a></li>
+                <!-- Remove the logout link from here -->
+            </ul>
+        </nav>
+        <!-- User Profile Section -->
+        <div class="profile-icon-container">
+            <div class="profile-icon" onclick="toggleProfileDropdown()">
+                <span>👤</span> <!-- Replace with an actual profile icon or image -->
+            </div>
+            <div class="profile-dropdown" id="profile-dropdown">
+                <p>Welcome, Faculty!</p>
+                <button onclick="viewProfile()">View Profile</button>
+                <button onclick="logout()">Logout</button> <!-- Logout button in the dropdown -->
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Attendance Management Section -->
+        <div id="attendance-management">
+            <h2>Attendance Management</h2>
+
+            <select id="event-select">
+                <option value="">Select an Event</option>
+            </select>
+        
+            <!-- Dropdown to toggle between Participants and Volunteers -->
+            <div id="role-select" hidden>
+                <label for="role-dropdown">View:</label>
+                <select id="role-dropdown">
+                    <option value="">Select Type</option>
+                    <option value="participant">Participants</option>
+                    <option value="volunteer">Volunteers</option>
+                </select>
+            </div>
+        
+            <!-- Participants Table -->
+            <div id="participants-section" class="attendance-section">
+                <h3>Participants</h3>
+                <table id="participants-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Event Name</th>
+                            <th>Attendance</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        
+            <!-- Volunteers Table -->
+            <div id="volunteers-section" class="attendance-section">
+                <h3>Volunteers</h3>
+                <table id="volunteers-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Event Name</th>
+                            <th>Attendance</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        
+            <!-- Buttons to mark all as Present or Absent -->
+            <div id="attendance-buttons">
+                <button id="mark-all-present">Mark All Present</button>
+                <button id="mark-all-absent">Mark All Absent</button>
+            </div>
+        
+            <!-- Submit Attendance Button -->
+            <button id="submit-attendance">Submit Attendance</button>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2025 College Event Management System</p>
+    </footer>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmation-modal" class="modal">
+        <div class="modal-content">
+            <p>Do you want to submit the attendance?</p>
+            <div class="modal-buttons">
+                <button id="confirm-submit">Yes, Submit</button>
+                <button id="cancel-submit">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/faculty.js"></script>
+</body>
+</html>

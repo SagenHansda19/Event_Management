@@ -1,0 +1,755 @@
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header Styles */
+header {
+    background-color: #333;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 32px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 15px 0 0;
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+}
+
+nav ul li {
+    margin: 0;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+nav ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+nav ul li a:active {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Main Content */
+main {
+    flex: 1;
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Add Event Section */
+#add-event {
+    background: linear-gradient(135deg, #ffffff, #f9f9f9);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#add-event:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+#add-event h2 {
+    margin-top: 0;
+    font-size: 22px;
+    color: #333;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+#add-event-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#add-event-form input,
+#add-event-form textarea {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#add-event-form input:focus,
+#add-event-form textarea:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+    outline: none;
+}
+
+#add-event-form textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+#add-event-form button {
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#add-event-form button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+#add-event-form button:active {
+    transform: translateY(0);
+}
+
+/* Manage Events Section */
+#manage-events {
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+#manage-events h2 {
+    margin-top: 0;
+    font-size: 22px;
+    color: #333;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.events-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.events-table th, .events-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.events-table th {
+    background-color: #555;
+    color: white;
+    font-weight: bold;
+}
+
+.events-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.events-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.events-table td button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.events-table td button:hover {
+    background-color: #0056b3;
+    transform: translateY(-1px);
+}
+
+.events-table td button:active {
+    transform: translateY(0);
+}
+
+/* Edit Mode Styles */
+.edit-mode {
+    background-color: #f9f9f9;
+}
+
+.edit-mode input,
+.edit-mode textarea {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.edit-mode button {
+    margin-top: 5px;
+}
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 15px;
+    background-color: #333;
+    color: white;
+    margin-top: auto;
+}
+
+/* Attendance Management Section */
+#attendance-management {
+    background-color: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+#event-select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+#role-select {
+    margin: 20px 0;
+}
+
+#role-select label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+#role-select select {
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.attendance-section {
+    display: none; /* Hide by default */
+}
+
+.attendance-section.active {
+    display: block; /* Show when active */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+table th {
+    background-color: #555;
+    color: white;
+    font-weight: bold;
+}
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.attended-true {
+    background-color: #e8f5e9; /* Light green for attended */
+}
+
+.attended-false {
+    background-color: #ffebee; /* Light red for absent */
+}
+
+#attendance-buttons {
+    margin-top: 20px;
+    display: none; /* Hide by default */
+}
+
+#attendance-buttons button {
+    padding: 10px 20px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+#mark-all-present {
+    background-color: #4caf50; /* Green */
+    color: white;
+}
+
+#mark-all-absent {
+    background-color: #f44336; /* Red */
+    color: white;
+}
+
+#submit-attendance {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #007bff; /* Blue */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* Modal Styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.modal-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.modal-buttons button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+#confirm-submit {
+    background-color: #4caf50; /* Green */
+    color: white;
+}
+
+#confirm-submit:hover {
+    background-color: #45a049; /* Darker green */
+}
+
+#cancel-submit {
+    background-color: #f44336; /* Red */
+    color: white;
+}
+
+#cancel-submit:hover {
+    background-color: #e53935; /* Darker red */
+}
+
+/* Login Section Styles */
+#login-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+    padding: 20px;
+}
+
+.login-container {
+    background: linear-gradient(135deg, #ffffff, #f9f9f9);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.login-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.login-container h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #555;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+    outline: none;
+}
+
+#login-form button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#login-form button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+#login-form button:active {
+    transform: translateY(0);
+}
+
+#error-message {
+    margin-top: 15px;
+    color: #ff4d4d;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Event Registration Section */
+.event-registration {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.event-registration h2 {
+    margin-top: 0;
+    font-size: 24px;
+    color: #333;
+    text-align: center;
+}
+
+.event-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.event-card {
+    background: linear-gradient(135deg, #ffffff, #f9f9f9);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.event-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.event-card h3 {
+    margin-top: 0;
+    font-size: 20px;
+    color: #007bff;
+}
+
+.event-card p {
+    margin: 10px 0;
+    font-size: 14px;
+    color: #555;
+}
+
+.event-card button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.event-card button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+.event-card button:active {
+    transform: translateY(0);
+}
+
+/* Profile Management Section */
+.profile-management {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.profile-management h2 {
+    margin-top: 0;
+    font-size: 24px;
+    color: #333;
+    text-align: center;
+}
+
+#profile-details {
+    margin-bottom: 20px;
+}
+
+#profile-details p {
+    margin: 10px 0;
+    font-size: 16px;
+    color: #555;
+}
+
+#edit-profile {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+#edit-profile:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+#edit-profile:active {
+    transform: translateY(0);
+}
+
+/* Profile Icon and Dropdown */
+.profile-icon-container {
+    position: absolute; /* Position absolutely within the header */
+    top: 20px; /* Adjust as needed */
+    right: 20px; /* Move to the top right */
+}
+
+.profile-icon {
+    width: 40px;
+    height: 40px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.profile-icon:hover {
+    background-color: #0056b3;
+}
+
+.profile-dropdown {
+    position: absolute;
+    top: 50px; /* Position below the profile icon */
+    right: 0; /* Align with the right edge of the profile icon */
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    width: 200px;
+    display: none; /* Hidden by default */
+    z-index: 1000;
+}
+
+.profile-dropdown p {
+    margin: 10px 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.profile-dropdown button {
+    width: 100%;
+    padding: 8px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.profile-dropdown button:hover {
+    background-color: #0056b3;
+}
+
+/* Show dropdown when profile icon is clicked */
+.profile-icon-container.active .profile-dropdown {
+    display: block;
+}
+
+/* Profile Icon and Dropdown */
+.profile-icon-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 1000; /* Ensure it's above other elements */
+}
+
+.profile-icon {
+    width: 40px;
+    height: 40px;
+    background-color: #007bff; /* Blue */
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.profile-icon:hover {
+    background-color: #0056b3; /* Darker blue */
+    transform: scale(1.1); /* Slightly enlarge on hover */
+}
+
+.profile-dropdown {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    width: 200px;
+    display: none; /* Hidden by default */
+    opacity: 0; /* Start with 0 opacity for animation */
+    transform: translateY(-10px); /* Start slightly above for animation */
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 1000;
+}
+
+.profile-dropdown.active {
+    display: block;
+    opacity: 1; /* Fully visible */
+    transform: translateY(0); /* Move to its original position */
+}
+
+.profile-dropdown p {
+    margin: 10px 0;
+    font-size: 14px;
+    color: #333;
+    text-align: left;
+}
+
+.profile-dropdown button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff; /* Blue */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 10px;
+}
+
+.profile-dropdown button:hover {
+    background-color: #0056b3; /* Darker blue */
+    transform: translateY(-2px); /* Slight lift on hover */
+}
+
+.profile-dropdown button:active {
+    transform: translateY(0); /* Reset on click */
+}
+
+/* Specific style for the logout button */
+.profile-dropdown button[onclick="logout()"] {
+    background-color: #dc3545; /* Red for logout */
+}
+
+.profile-dropdown button[onclick="logout()"]:hover {
+    background-color: #c82333; /* Darker red on hover */
+}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Participant Dashboard</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Participant Dashboard</h1>
+        <nav>
+            <ul>
+                <li><a href="participant.html">My Events</a></li>
+                <!-- Remove the logout link from here -->
+            </ul>
+        </nav>
+        <!-- Profile Icon and Dropdown -->
+        <div class="profile-icon-container">
+            <div id="profile-icon" class="profile-icon"></div>
+            <div id="profile-dropdown" class="profile-dropdown">
+                <p><strong>Username:</strong> <span id="profile-username"></span></p>
+                <p><strong>Email:</strong> <span id="profile-email"></span></p>
+                <button id="edit-profile">Edit Profile</button>
+                <button onclick="logout()">Logout</button> <!-- Add logout button here -->
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="event-registration">
+            <h2>Available Events</h2>
+            <div id="event-list" class="event-grid"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 College Event Management System</p>
+    </footer>
+
+    <script src="js/participant.js"></script>
+</body>
+</html>

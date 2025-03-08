@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Settings</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>System Settings</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="event.html">Events</a></li>
+                <li><a href="volunteers.html">Volunteers</a></li>
+                <li><a href="analytics.html">Analytics</a></li>
+                <li><a href="settings.html">Settings</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="user-settings">
+            <h2>User Preferences</h2>
+            <form id="settings-form">
+                <label for="theme">Theme:</label>
+                <select id="theme">
+                    <option value="light">Light</option>
+                    <option value="dark">Dark</option>
+                </select>
+
+                <label for="notifications">Enable Notifications:</label>
+                <input type="checkbox" id="notifications">
+
+                <button type="submit">Save Settings</button>
+            </form>
+        </section>
+
+        <section class="system-settings">
+            <h2>System Configuration</h2>
+            <button id="export-data">Export Data</button>
+            <button id="import-data">Import Data</button>
+            <button id="reset-data">Reset Data</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 College Event Management System</p>
+    </footer>
+
+    <script src="js/settings.js"></script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Details</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Event Details</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="event.html">Events</a></li>
+                <li><a href="volunteers.html">Volunteers</a></li>
+                <li><a href="analytics.html">Analytics</a></li>
+                <li><a href="settings.html">Settings</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="create-event">
+            <h2>Create Event</h2>
+            <form id="create-event-form">
+                <label for="event-name">Event Name:</label>
+                <input type="text" id="event-name" required>
+                
+                <label for="event-date">Event Date:</label>
+                <input type="date" id="event-date" required>
+                
+                <label for="event-location">Location:</label>
+                <input type="text" id="event-location">
+                
+                <label for="event-description">Description:</label>
+                <textarea id="event-description" required></textarea>
+                
+                <button type="submit">Create Event</button>
+            </form>
+        </section>
+
+        <section class="event-details">
+            <h2>Event Details</h2>
+            <div id="events-container"></div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 College Event Management System</p>
+    </footer>
+
+    <script src="js/event.js"></script>
+</body>
+</html>

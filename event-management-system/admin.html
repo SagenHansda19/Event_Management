@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Admin Dashboard</h1>
+        <nav>
+            <ul>
+                <li><a href="admin.html">Manage Events</a></li>
+                <li><a href="login.html">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Add Event Section -->
+        <section id="add-event">
+            <h2>Add Event</h2>
+            <form id="add-event-form">
+                <input type="text" id="event-name" placeholder="Event Name" required>
+                <input type="date" id="event-date" required>
+                <input type="text" id="event-location" placeholder="Event Location" required>
+                <textarea id="event-description" placeholder="Event Description" required></textarea>
+                <button type="submit">Add Event</button>
+            </form>
+        </section>
+
+        <!-- Manage Events Section -->
+        <section id="manage-events">
+            <h2>Manage Events</h2>
+            <table id="event-table" class="events-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Date</th>
+                        <th>Location</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="event-list"></tbody>
+            </table>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 College Event Management System</p>
+    </footer>
+
+    <script src="js/admin.js"></script>
+</body>
+</html>
