@@ -12,31 +12,65 @@
         <nav>
             <ul>
                 <li><a href="participant.html">My Events</a></li>
-                <!-- Remove the logout link from here -->
             </ul>
         </nav>
-        <!-- Profile Icon and Dropdown -->
+        <!-- User Profile Section -->
         <div class="profile-icon-container">
-            <div id="profile-icon" class="profile-icon"></div>
+            <div id="profile-icon" class="profile-icon">
+                <span>👤</span> <!-- Replace with an actual profile icon or image -->
+            </div>
             <div id="profile-dropdown" class="profile-dropdown">
-                <p><strong>Username:</strong> <span id="profile-username"></span></p>
-                <p><strong>Email:</strong> <span id="profile-email"></span></p>
-                <button id="edit-profile">Edit Profile</button>
-                <button onclick="logout()">Logout</button> <!-- Add logout button here -->
+                <p>Welcome, Participant!</p>
+                <button onclick="viewProfile()">View Profile</button>
+                <button onclick="logout()">Logout</button>
             </div>
         </div>
     </header>
 
     <main>
-        <section class="event-registration">
-            <h2>Available Events</h2>
-            <div id="event-list" class="event-grid"></div>
-        </section>
+        <!-- My Events Section -->
+        <div id="my-events">
+            <h2>My Events</h2>
+
+            <!-- Dropdown to filter events -->
+            <select id="event-filter">
+                <option value="">All Events</option>
+                <option value="upcoming">Upcoming Events</option>
+                <option value="past">Past Events</option>
+            </select>
+
+            <!-- Events Table -->
+            <table id="events-table" style="display: none;"> <!-- Initially hidden -->
+                <thead>
+                    <tr>
+                        <th>Event Name</th>
+                        <th>Date</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            <!-- Message when no events are found -->
+            <p id="no-events-message" style="display: none;">You have not registered for any events.</p>
+        </div>
     </main>
 
     <footer>
         <p>© 2025 College Event Management System</p>
     </footer>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmation-modal" class="modal">
+        <div class="modal-content">
+            <p>Are you sure you want to unregister from this event?</p>
+            <div class="modal-buttons">
+                <button id="confirm-unregister">Yes, Unregister</button>
+                <button id="cancel-unregister">Cancel</button>
+            </div>
+        </div>
+    </div>
 
     <script src="js/participant.js"></script>
 </body>
