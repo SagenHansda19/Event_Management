@@ -31,28 +31,18 @@
         <!-- My Events Section -->
         <div id="my-events">
             <h2>My Events</h2>
-
-            <!-- Dropdown to filter events -->
+            
+            <!-- Filter dropdown -->
             <select id="event-filter">
                 <option value="">All Events</option>
                 <option value="upcoming">Upcoming Events</option>
                 <option value="past">Past Events</option>
             </select>
-
-            <!-- Events Table -->
-            <table id="events-table" style="display: none;"> <!-- Initially hidden -->
-                <thead>
-                    <tr>
-                        <th>Event Name</th>
-                        <th>Date</th>
-                        <th>Location</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-
-            <!-- Message when no events are found -->
+        
+            <!-- Event cards grid -->
+            <div id="events-grid" class="events-grid"></div>
+        
+            <!-- No events message -->
             <p id="no-events-message" style="display: none;">You have not registered for any events.</p>
         </div>
     </main>

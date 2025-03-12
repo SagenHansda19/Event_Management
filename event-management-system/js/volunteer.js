@@ -53,13 +53,12 @@ async function fetchParticipantEvents() {
 }
 
 // Display the volunteer's registered events
-async function displayParticipantEvents() {
-    const eventsTable = document.getElementById('events-table');
-    const eventsTableBody = eventsTable.querySelector('tbody');
+async function displayVolunteerEvents() {
+    const eventsGrid = document.getElementById('events-grid');
     const noEventsMessage = document.getElementById('no-events-message');
 
     // Clear existing rows
-    eventsTableBody.innerHTML = '';
+    eventsGrid.innerHTML = '';
 
     // Fetch events
     const events = await fetchParticipantEvents();
@@ -67,23 +66,22 @@ async function displayParticipantEvents() {
 
     if (events.length > 0) {
         // Show the table
-        eventsTable.style.display = 'table';
+        eventsGrid.style.display = 'grid';
         noEventsMessage.style.display = 'none';
 
         // Populate the table
         events.forEach(event => {
-            const row = document.createElement('tr');
+            const eventCard = document.createElement('div');
+            eventCard.className = 'event-card';
             if (event.id) {
-                row.innerHTML = `
-                    <td>${event.name}</td>
-                    <td>${new Date(event.date).toLocaleString()}</td>
-                    <td>${event.location}</td>
-                    <td>
-                        <button onclick="registerForEvent(${event.id})">Register</button>
-                    </td>
+                eventCard.innerHTML = `
+                    <h3>${event.name}</h3>
+                    <p class="event-date">${new Date(event.date).toLocaleString()}</p>
+                    <p class="event-location">${event.location}</p>
+                    <button onclick="registerForEvent(${event.id})">Register</button>
                 `;
-            }            
-            eventsTableBody.appendChild(row);
+            }
+            eventsGrid.appendChild(eventCard);
         });
     } else {
         // Hide the table and show the "no events" message
@@ -131,7 +129,7 @@ async function registerForEvent(eventId) {
         const data = await response.json();
         if (data.status === 'success') {
             alert('Successfully registered for the event!');
-            await displayParticipantEvents(); // Refresh the events table
+            await displayVolunteerEvents(); // Refresh the events table
         } else {
             alert('Failed to register for the event. Please try again.');
         }
@@ -183,7 +181,7 @@ async function logout() {
 
 // Initialize the volunteer dashboard
 document.addEventListener('DOMContentLoaded', async () => {
-    await displayParticipantEvents(); // Display the participant's registered events
+    await displayVolunteerEvents(); // Display the participant's registered events
     // await updateProfileDetails(); // Fetch and display the logged-in user's details
     
     // Add click event listener to the profile icon
@@ -224,46 +222,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 });
-
-async function login(username, password) {
-    try {
-        const response = await fetch('http://localhost/event-management-php/api/login.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                username: username,
-                password: password,
-            }),
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}));
-            throw new Error(errorData.message || "Failed to login");
-        }
-
-        const data = await response.json();
-        console.log('Login response:', data); // Log the response
-
-        // Store user details in localStorage
-        localStorage.setItem('currentUser', JSON.stringify({
-            user_id: data.user_id, // Ensure user_id is included
-            username: data.username,
-            role: data.role
-        }));
-
-        alert('Login successful!');
-        if (data.role === 'volunteer') {
-            window.location.href = 'volunteer.html'; // Redirect to the volunteer dashboard
-        } else {
-            window.location.href = 'participant.html'; // Redirect to the participant dashboard
-        }
-    } catch (error) {
-        console.error('Error logging in:', error);
-        alert('Failed to login. Please try again.');
-    }
-}
 
 function viewProfile() {
     // Redirect to the profile page or show a modal

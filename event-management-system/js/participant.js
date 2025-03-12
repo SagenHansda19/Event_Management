@@ -54,12 +54,11 @@ async function fetchParticipantEvents() {
 // Display the participant's registered events
 // Display all available events
 async function displayParticipantEvents() {
-    const eventsTable = document.getElementById('events-table');
-    const eventsTableBody = eventsTable.querySelector('tbody');
+    const eventsGrid = document.getElementById('events-grid');
     const noEventsMessage = document.getElementById('no-events-message');
 
     // Clear existing rows
-    eventsTableBody.innerHTML = '';
+    eventsGrid.innerHTML = '';
 
     // Fetch events
     const events = await fetchParticipantEvents();
@@ -67,23 +66,22 @@ async function displayParticipantEvents() {
 
     if (events.length > 0) {
         // Show the table
-        eventsTable.style.display = 'table';
+        eventsGrid.style.display = 'grid';
         noEventsMessage.style.display = 'none';
 
         // Populate the table
         events.forEach(event => {
-            const row = document.createElement('tr');
+            const eventCard = document.createElement('div');
+            eventCard.className = 'event-card';
             if (event.id) {
-                row.innerHTML = `
-                    <td>${event.name}</td>
-                    <td>${new Date(event.date).toLocaleString()}</td>
-                    <td>${event.location}</td>
-                    <td>
-                        <button onclick="registerForEvent(${event.id})">Register</button>
-                    </td>
+                eventCard.innerHTML = `
+                    <h3>${event.name}</h3>
+                    <p class="event-date">${new Date(event.date).toLocaleString()}</p>
+                    <p class="event-location">${event.location}</p>
+                    <button onclick="registerForEvent(${event.id})">Register</button>
                 `;
-            }            
-            eventsTableBody.appendChild(row);
+            }
+            eventsGrid.appendChild(eventCard);
         });
     } else {
         // Hide the table and show the "no events" message
