@@ -12,26 +12,87 @@
         <nav>
             <ul>
                 <li><a href="volunteer.html">My Tasks</a></li>
-                <li><a href="login.html">Logout</a></li>
             </ul>
         </nav>
+        <!-- User Profile Section -->
+        <div class="profile-icon-container">
+            <div id="profile-icon" class="profile-icon">
+                <span>👤</span> <!-- Replace with an actual profile icon or image -->
+            </div>
+            <div id="profile-dropdown" class="profile-dropdown">
+                <p>Welcome, Volunteer!</p>
+                <button onclick="viewProfile()">View Profile</button>
+                <button onclick="logout()">Logout</button>
+            </div>
+        </div>
     </header>
 
     <main>
-        <section class="task-management">
+        <!-- My Tasks Section -->
+        <div id="my-tasks">
             <h2>My Tasks</h2>
-            <div id="task-list"></div>
-        </section>
-        
-        <section class="available-events">
+
+            <!-- Dropdown to filter tasks -->
+            <select id="task-filter">
+                <option value="">All Tasks</option>
+                <option value="upcoming">Upcoming Tasks</option>
+                <option value="past">Past Tasks</option>
+            </select>
+
+            <!-- Tasks Table -->
+            <table id="tasks-table" style="display: none;"> <!-- Initially hidden -->
+                <thead>
+                    <tr>
+                        <th>Task Name</th>
+                        <th>Event Name</th>
+                        <th>Date</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            <!-- Message when no tasks are found -->
+            <p id="no-tasks-message" style="display: none;">You have no assigned tasks.</p>
+        </div>
+
+        <!-- Available Events Section -->
+        <div id="available-events">
             <h2>Available Events</h2>
-            <div id="available-events-list"></div>
-        </section>
+
+            <!-- Events Table -->
+            <table id="events-table" style="display: none;"> <!-- Initially hidden -->
+                <thead>
+                    <tr>
+                        <th>Event Name</th>
+                        <th>Date</th>
+                        <th>Location</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            <!-- Message when no events are found -->
+            <p id="no-events-message" style="display: none;">No events available.</p>
+        </div>
     </main>
 
     <footer>
         <p>© 2025 College Event Management System</p>
     </footer>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmation-modal" class="modal">
+        <div class="modal-content">
+            <p>Are you sure you want to unregister from this task?</p>
+            <div class="modal-buttons">
+                <button id="confirm-unregister">Yes, Unregister</button>
+                <button id="cancel-unregister">Cancel</button>
+            </div>
+        </div>
+    </div>
 
     <script src="js/volunteer.js"></script>
 </body>

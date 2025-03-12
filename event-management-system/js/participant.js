@@ -299,6 +299,7 @@ async function registerForEvent(eventId) {
         }
 
         const username = currentUser.username;
+        const role = currentUser.role;
 
         // Fetch the user_id using the username
         const userId = await fetchUserIdByUsername(username);
@@ -313,6 +314,7 @@ async function registerForEvent(eventId) {
             body: JSON.stringify({
                 event_id: eventId,
                 user_id: userId, // Include the user_id in the request body
+                role: role, // Include the role in the request
             }),
         });
 
@@ -332,6 +334,6 @@ async function registerForEvent(eventId) {
         }
     } catch (error) {
         console.error('Error registering for event:', error);
-        alert('Failed to register for the event. Please try again.');
+        // alert('Failed to register for the event. Please try again.');
     }
 }
