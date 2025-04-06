@@ -335,3 +335,59 @@ async function registerForEvent(eventId) {
         // alert('Failed to register for the event. Please try again.');
     }
 }
+
+// Fetch DL requests for the logged-in student
+async function fetchDLRequests() {
+    try {
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        if (!currentUser || !currentUser.username) {
+            throw new Error('User not logged in');
+        }
+
+        const username = currentUser.username;
+        const userId = await fetchUserIdByUsername(username);
+
+        const response = await fetch(`http://localhost/event-management-php/api/dl_requests.php?student_id=${userId}`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch DL requests');
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching DL requests:', error);
+        return [];
+    }
+}
+
+// Display DL requests in the table
+async function displayDLRequests() {
+    const dlRequestsTable = document.querySelector('#dl-requests-table tbody');
+    const noDLRequestsMessage = document.getElementById('no-dl-requests-message');
+
+    // Clear existing rows
+    dlRequestsTable.innerHTML = '';
+
+    // Fetch DL requests
+    const dlRequests = await fetchDLRequests();
+    console.log('DL Requests:', dlRequests);
+
+    if (dlRequests.length > 0) {
+        dlRequestsTable.style.display = 'table';
+        noDLRequestsMessage.style.display = 'none';
+
+        // Populate the table
+        dlRequests.forEach(request => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${request.event_name}</td>
+                <td>${request.dl_code}</td>
+                <td>${request.status}</td>
+            `;
+            dlRequestsTable.appendChild(row);
+        });
+    } else {
+        dlRequestsTable.style.display = 'none';
+        noDLRequestsMessage.style.display = 'block';
+    }
+}

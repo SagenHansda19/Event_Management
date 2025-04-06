@@ -222,6 +222,7 @@ function markAllAbsent() {
 
 // Initialize the faculty dashboard
 document.addEventListener('DOMContentLoaded', async () => {
+    
     await populateEventDropdown();
 
     // Load attendance when an event is selected
@@ -264,4 +265,111 @@ function logout() {
 
     // Redirect to the login page
     window.location.href = 'login.html'; // Replace with your login page URL
+}
+
+// Fetch all DL requests
+async function fetchDLRequests() {
+    try {
+        const response = await fetch('http://localhost/event-management-php/api/dl_requests.php');
+        if (!response.ok) {
+            throw new Error('Failed to fetch DL requests');
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching DL requests:', error);
+        return [];
+    }
+}
+
+// Display DL requests in the table
+async function displayDLRequests() {
+    const dlRequestsTable = document.querySelector('#dl-requests-table tbody');
+    const noDLRequestsMessage = document.getElementById('no-dl-requests-message');
+
+    // Clear existing rows
+    dlRequestsTable.innerHTML = '';
+
+    // Fetch DL requests
+    const dlRequests = await fetchDLRequests();
+    console.log('DL Requests:', dlRequests);
+
+    if (dlRequests.length > 0) {
+        dlRequestsTable.style.display = 'table';
+        noDLRequestsMessage.style.display = 'none';
+
+        // Populate the table
+        dlRequests.forEach(request => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${request.event_name}</td>
+                <td>${request.student_name}</td>
+                <td>${request.dl_code}</td>
+                <td>${request.status}</td>
+                <td>
+                    <button onclick="approveDLRequest(${request.id})">Approve</button>
+                    <button onclick="rejectDLRequest(${request.id})">Reject</button>
+                </td>
+            `;
+            dlRequestsTable.appendChild(row);
+        });
+    } else {
+        dlRequestsTable.style.display = 'none';
+        noDLRequestsMessage.style.display = 'block';
+    }
+}
+
+// Approve a DL request
+async function approveDLRequest(requestId) {
+    try {
+        const response = await fetch(`http://localhost/event-management-php/api/dl_requests.php?id=${requestId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ status: 'approved' }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to approve DL request');
+        }
+
+        const data = await response.json();
+        if (data.status === 'success') {
+            await displayDLRequests(); // Refresh the DL requests table
+        } else {
+            alert('Failed to approve DL request. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error approving DL request:', error);
+        alert('Failed to approve DL request. Please try again.');
+    }
+}
+
+// Reject a DL request
+async function rejectDLRequest(requestId) {
+    try {
+        const response = await fetch(`http://localhost/event-management-php/api/dl_requests.php?id=${requestId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ status: 'rejected' }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to reject DL request');
+        }
+
+        const data = await response.json();
+        if (data.status === 'success') {
+            await displayDLRequests(); // Refresh the DL requests table
+        } else {
+            alert('Failed to reject DL request. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error rejecting DL request:', error);
+        alert('Failed to reject DL request. Please try again.');
+    }
 }

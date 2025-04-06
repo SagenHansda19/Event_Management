@@ -190,12 +190,14 @@ document.getElementById('add-event-form').addEventListener('submit', function (e
     const eventDate = document.getElementById('event-date').value;
     const eventLocation = document.getElementById('event-location').value;
     const eventDescription = document.getElementById('event-description').value;
+    const autoApproveDL = document.getElementById('auto-approve-dl').checked;
 
     const newEvent = {
         name: eventName,
         date: eventDate,
         location: eventLocation,
         description: eventDescription,
+        auto_approve_dl: autoApproveDL, // Include the auto-approval flag
     };
 
     fetch('http://localhost/event-management-php/api/events.php', {
@@ -215,7 +217,6 @@ document.getElementById('add-event-form').addEventListener('submit', function (e
             if (data.status === 'success') {
                 displayEvents(); // Refresh the event list
                 document.getElementById('add-event-form').reset(); // Clear the form
-                // alert('Event added successfully!');
             } else {
                 alert('Error adding event: ' + data.message);
             }
