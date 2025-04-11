@@ -1,35 +1,39 @@
 const API_BASE = 'http://localhost/event-management-php/api';
 
 // DOM Elements
-const availableGrid = document.getElementById('available-events-grid');
-const registeredGrid = document.getElementById('registered-events-grid');
+const upcomingAvailableGrid = document.getElementById('upcoming-events-grid');
+const pastAvailableGrid = document.getElementById('past-events-grid');
+const upcomingRegisteredGrid = document.getElementById('upcoming-registered-grid');
+const pastRegisteredGrid = document.getElementById('past-registered-grid');
 const noRegistered = document.getElementById('no-registered-events');
 
 // Initialize Dashboard
 document.addEventListener('DOMContentLoaded', async () => {
     console.log('DOM fully loaded');
     
-    // Verify elements exist
-    if (!registeredGrid || !availableGrid || !noRegistered) {
+    // Verify elements exist with new IDs
+    if (!upcomingAvailableGrid || !pastAvailableGrid || 
+        !upcomingRegisteredGrid || !pastRegisteredGrid || !noRegistered) {
         console.error('Critical DOM elements missing!');
-        console.log('registeredGrid exists:', !!registeredGrid);
-        console.log('availableGrid exists:', !!availableGrid);
+        console.log('upcomingAvailableGrid exists:', !!upcomingAvailableGrid);
+        console.log('pastAvailableGrid exists:', !!pastAvailableGrid);
+        console.log('upcomingRegisteredGrid exists:', !!upcomingRegisteredGrid);
+        console.log('pastRegisteredGrid exists:', !!pastRegisteredGrid);
         console.log('noRegistered exists:', !!noRegistered);
         return;
     }
+    
     try {
         const user = await loadUserData();
         if (user) {
+            setupTabs(); // Initialize tabs first
             await loadAllEvents();
             setupEventListeners();
-            // setupProfileDropdown();
         }
     } catch (error) {
         console.error('Initialization error:', error);
         showNotification('Failed to initialize dashboard', 'error');
     }
-    // console.log('Available events container:', availableGrid.innerHTML);
-    // console.log('Registered events container:', registeredGrid.innerHTML);
 });
 
 // Update loadUserData in student.js
@@ -79,7 +83,7 @@ async function loadUserData() {
 async function loadAllEvents() {
     try {
         console.log('Loading all events...');
-        const [available, registered] = await Promise.all([
+        await Promise.all([
             loadAvailableEvents().catch(e => {
                 console.error('Available events error:', e);
                 return null;
@@ -89,72 +93,76 @@ async function loadAllEvents() {
                 return null;
             })
         ]);
-        console.log('Loading complete', {available, registered});
-        return {available, registered}; // Add this line
     } catch (error) {
         console.error('Global events error:', error);
         showNotification('Failed to load events', 'error');
-        return {available: null, registered: null};
     }
 }
 
 async function loadAvailableEvents() {
     try {
-        console.log('[AvailableEvents] Fetching...');
         const response = await fetch(`${API_BASE}/events.php`);
-        console.log('[AvailableEvents] Response:', response);
-        
         const data = await parseResponse(response);
-        console.log('[AvailableEvents] Data:', data);
         
         if (!response.ok) throw new Error(data.message || 'Failed to load events');
 
-        availableGrid.innerHTML = data.length > 0 
-            ? data.map(event => createEventCard(event, false)).join('')
-            : '<p class="no-events">No available events</p>';
+        const { upcoming, past } = categorizeEvents(data);
+        
+        // Safely update grids only if they exist
+        const upcomingGrid = document.getElementById('upcoming-events-grid');
+        const pastGrid = document.getElementById('past-events-grid');
+        
+        if (upcomingGrid) {
+            upcomingGrid.innerHTML = upcoming.length > 0 
+                ? upcoming.map(event => createEventCard(event, false)).join('') 
+                : '<p class="no-events">No upcoming events</p>';
+        }
+        
+        if (pastGrid) {
+            pastGrid.innerHTML = past.length > 0 
+                ? past.map(event => createEventCard(event, false)).join('') 
+                : '<p class="no-events">No past events</p>';
+        }
             
     } catch (error) {
         console.error('[AvailableEvents] Error:', error);
-        availableGrid.innerHTML = '<p class="error">Error loading events</p>';
         showNotification('Failed to load available events', 'error');
     }
 }
 
 async function loadRegisteredEvents() {
     try {
-        console.log('[1] Loading registered events...');
         const response = await fetch(`${API_BASE}/registered_events.php`, {
             credentials: 'include'
         });
         
-        console.log('[2] Response status:', response.status);
         const data = await response.json();
-        console.log('[3] Response data:', data);
+        const { upcoming, past } = categorizeEvents(data.data || []);
 
         // Clear previous content
-        registeredGrid.innerHTML = '';
-        
+        ['upcoming-registered-grid', 'past-registered-grid'].forEach(id => {
+            document.getElementById(id).innerHTML = '';
+        });
+
         if (data.data && data.data.length > 0) {
-            console.log('[4] Rendering', data.data.length, 'events');
             noRegistered.style.display = 'none';
             
-            // Create document fragment for better performance
-            const fragment = document.createDocumentFragment();
-            
-            data.data.forEach(event => {
-                const cardElement = createRegisteredEventCardElement(event);
-                fragment.appendChild(cardElement);
+            upcoming.forEach(event => {
+                document.getElementById('upcoming-registered-grid')
+                    .appendChild(createRegisteredEventCardElement(event));
             });
             
-            registeredGrid.appendChild(fragment);
+            past.forEach(event => {
+                document.getElementById('past-registered-grid')
+                    .appendChild(createRegisteredEventCardElement(event));
+            });
         } else {
-            console.log('[5] No events found');
             noRegistered.style.display = 'block';
         }
         
     } catch (error) {
-        console.error('[ERROR] Loading events:', error);
-        registeredGrid.innerHTML = '<p class="error">Error loading events</p>';
+        console.error('Loading events:', error);
+        document.getElementById('upcoming-registered-grid').innerHTML = '<p class="error">Error loading events</p>';
     }
 }
 
@@ -392,5 +400,55 @@ function handleResponse(response) {
         } catch {
             throw new Error('Invalid server response');
         }
+    });
+}
+
+// Categorize events by time
+function categorizeEvents(events) {
+    const now = new Date();
+    return {
+        upcoming: events.filter(event => new Date(event.date) > now),
+        past: events.filter(event => new Date(event.date) <= now)
+    };
+}
+
+// Tab switching functionality
+function setupTabs() {
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const tabId = e.target.dataset.tab;
+            console.log(`Attempting to switch to tab: ${tabId}`); // Debug log
+            
+            const tabContent = document.getElementById(tabId);
+            
+            if (!tabContent) {
+                console.error(`Tab content not found for: ${tabId}`);
+                console.log('Available elements with similar IDs:');
+                // Log similar elements for debugging
+                document.querySelectorAll('[id*="events"]').forEach(el => {
+                    console.log(`- ${el.id}`);
+                });
+                return;
+            }
+
+            // Get the parent tabs container
+            const tabsContainer = e.target.closest('.events-tabs');
+            const section = tabsContainer?.closest('.events-section');
+            
+            if (!section) {
+                console.error('Could not find section container for tabs');
+                return;
+            }
+
+            // Deactivate all in this section
+            section.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            section.querySelectorAll('.events-grid').forEach(g => g.classList.remove('active'));
+            
+            // Activate current
+            e.target.classList.add('active');
+            tabContent.classList.add('active');
+            
+            console.log(`Successfully switched to tab: ${tabId}`); // Debug log
+        });
     });
 }

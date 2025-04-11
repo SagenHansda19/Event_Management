@@ -28,37 +28,34 @@
         </div>
     </header>
 
+    <!-- Replace the current events sections with this: -->
     <main>
-        <!-- Available Events Section -->
+        <!-- Available Events Section with Tabs -->
         <div class="events-section">
             <h2>Available Events</h2>
-            <div class="events-grid" id="available-events-grid"></div>
-            <!-- <p id="no-available-events" class="no-events">No upcoming events available</p> -->
+            <div class="events-tabs">
+                <button class="tab-btn active" data-tab="upcoming-events-grid">Upcoming</button>
+                <button class="tab-btn" data-tab="past-events-grid">Past</button> <!-- Fixed ID match -->
+            </div>
+            <div class="events-tab-content">
+                <div id="upcoming-events-grid" class="events-grid active"></div>
+                <div id="past-events-grid" class="events-grid"></div>
+            </div>
         </div>
 
-        <!-- Registered Events Section -->
+        <!-- Registered Events Section with Tabs -->
         <div class="events-section">
             <h2>My Registered Events</h2>
-            <div class="events-grid" id="registered-events-grid"></div>
-            <p id="no-registered-events" class="no-events">You have no registered events</p>
+            <div class="events-tabs">
+                <button class="tab-btn active" data-tab="upcoming-registered-grid">Upcoming</button>
+                <button class="tab-btn" data-tab="past-registered-grid">Past</button> <!-- Fixed ID match -->
+            </div>
+            <div class="events-tab-content">
+                <div id="upcoming-registered-grid" class="events-grid active"></div>
+                <div id="past-registered-grid" class="events-grid"></div>
+                <p id="no-registered-events" class="no-events">You have no registered events</p>
+            </div>
         </div>
-
-        <!-- Rectification Section -->
-        <!-- <div class="events-section">
-            <h2>Rectification Requests</h2>
-            <table id="rectification-table">
-                <thead>
-                    <tr>
-                        <th>Event Name</th>
-                        <th>Event Date</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-            <p id="no-rectification-message" class="no-events">No rectification requests needed</p>
-        </div> -->
     </main>
 
     <footer>
