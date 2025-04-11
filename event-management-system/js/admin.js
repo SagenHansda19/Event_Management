@@ -1,27 +1,25 @@
 let editingEventId = null;
 
-// Function to display the list of events in a table
+// Display all events in table
 function displayEvents() {
     const eventList = document.getElementById('event-list');
-    eventList.innerHTML = ''; // Clear existing event list
+    eventList.innerHTML = '';
+    
     fetch('http://localhost/event-management-php/api/events.php')
         .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
+            if (!response.ok) throw new Error('Network response was not ok');
             return response.json();
         })
         .then(events => {
-            if (!Array.isArray(events)) {
-                throw new Error('Invalid data format received');
-            }
+            if (!Array.isArray(events)) throw new Error('Invalid data format');
+            
             events.forEach(event => {
                 eventList.innerHTML += `
                     <tr id="event-${event.id}">
-                        <td>${event.name}</td>
-                        <td>${formatDate(event.date)}</td>
-                        <td>${event.location}</td>
-                        <td>${event.description}</td>
+                        <td>${escapeHtml(event.name)}</td>
+                        <td>${formatDisplayDate(event.date)}</td>
+                        <td>${escapeHtml(event.location)}</td>
+                        <td>${escapeHtml(event.description)}</td>
                         <td>
                             <button onclick="startEdit(${event.id})">Edit</button>
                             <button onclick="cancelEvent(${event.id})">Cancel</button>
@@ -31,203 +29,224 @@ function displayEvents() {
             });
         })
         .catch(error => {
-            console.error('Error fetching events:', error);
-            eventList.innerHTML = '<tr><td colspan="5">Error loading events. Please try again later.</td></tr>';
+            console.error('Error loading events:', error);
+            eventList.innerHTML = '<tr><td colspan="5" class="error">Error loading events. Please try again.</td></tr>';
         });
 }
 
-// Function to format date for display
-function formatDate(dateString) {
-    const date = new Date(dateString);
-    if (isNaN(date.getTime())) {
-        return 'Invalid Date';
+// Format date for display (MM/DD/YYYY)
+function formatDisplayDate(dateString) {
+    try {
+        if (!dateString) return 'No date set';
+        const date = new Date(dateString);
+        return isNaN(date.getTime()) ? 'Invalid date' : date.toLocaleDateString('en-US');
+    } catch (e) {
+        console.error('Date formatting error:', e);
+        return 'Invalid date';
     }
-    return date.toLocaleDateString();
 }
 
-// Function to start editing an event
-function startEdit(eventId) {
-    const eventRow = document.getElementById(`event-${eventId}`);
-    if (!eventRow) return;
-
-    const [name, date, location, description] = eventRow.children;
-
-    // Save the original values
-    const originalValues = {
-        name: name.textContent,
-        date: date.textContent,
-        location: location.textContent,
-        description: description.textContent,
-    };
-
-    // Replace text with input fields
-    name.innerHTML = `<input type="text" value="${originalValues.name}">`;
-    date.innerHTML = `<input type="date" value="${formatDateForInput(originalValues.date)}">`;
-    location.innerHTML = `<input type="text" value="${originalValues.location}">`;
-    description.innerHTML = `<textarea>${originalValues.description}</textarea>`;
-
-    // Add save and cancel buttons
-    eventRow.children[4].innerHTML = `
-        <button onclick="saveEdit(${eventId})">Save</button>
-        <button onclick="cancelEdit(${eventId}, ${JSON.stringify(originalValues).replace(/"/g, '&quot;')})">Cancel</button>
-    `;
-
-    // Add edit mode styling
-    eventRow.classList.add('edit-mode');
-    editingEventId = eventId;
-}
-
-// Function to format date for input field
-function formatDateForInput(dateString) {
-    const date = new Date(dateString);
-    if (isNaN(date.getTime())) {
+// Format date for input field (YYYY-MM-DD)
+function formatInputDate(dateString) {
+    try {
+        if (!dateString) return '';
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) return '';
+        
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    } catch (e) {
+        console.error('Date parsing error:', e);
         return '';
     }
-    return date.toISOString().split('T')[0];
 }
 
-// Function to save the edited event
-function saveEdit(eventId) {
-    const eventRow = document.getElementById(`event-${eventId}`);
-    if (!eventRow) return;
-
-    const [name, date, location, description] = eventRow.children;
-
-    const updatedEvent = {
-        id: eventId,
-        name: name.querySelector('input').value,
-        date: date.querySelector('input').value,
-        location: location.querySelector('input').value,
-        description: description.querySelector('textarea').value,
-    };
-
-    fetch(`http://localhost/event-management-php/api/events.php?id=${eventId}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedEvent),
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.status === 'success') {
-                displayEvents(); // Refresh the event list
-                editingEventId = null;
-            } else {
-                alert('Error updating event: ' + data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error updating event:', error);
-            alert('Failed to update event. Please try again.');
-        });
+// Basic HTML escaping for safety
+function escapeHtml(str) {
+    if (!str) return '';
+    return str.toString()
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
 }
 
-// Function to cancel editing
-function cancelEdit(eventId, originalValues) {
-    const eventRow = document.getElementById(`event-${eventId}`);
-    if (!eventRow) return;
+// Start editing an event
+function startEdit(eventId) {
+    try {
+        const eventRow = document.getElementById(`event-${eventId}`);
+        if (!eventRow) throw new Error('Event row not found');
+        
+        const cells = eventRow.querySelectorAll('td:not(:last-child)');
+        const originalValues = {
+            name: cells[0].textContent,
+            date: cells[1].textContent,
+            location: cells[2].textContent,
+            description: cells[3].textContent
+        };
 
-    const [name, date, location, description] = eventRow.children;
-
-    // Restore original values
-    name.textContent = originalValues.name;
-    date.textContent = originalValues.date;
-    location.textContent = originalValues.location;
-    description.textContent = originalValues.description;
-
-    // Restore action buttons
-    eventRow.children[4].innerHTML = `
-        <button onclick="startEdit(${eventId})">Edit</button>
-        <button onclick="cancelEvent(${eventId})">Cancel</button>
-    `;
-
-    // Remove edit mode styling
-    eventRow.classList.remove('edit-mode');
-    editingEventId = null;
-}
-
-// Function to cancel an event
-function cancelEvent(eventId) {
-    if (confirm('Are you sure you want to cancel this event?')) {
-        fetch(`http://localhost/event-management-php/api/events.php`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ id: eventId }),
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.status === 'success') {
-                    displayEvents(); // Refresh the event list
-                } else {
-                    alert('Error canceling event: ' + data.message);
-                }
-            })
-            .catch(error => {
-                console.error('Error canceling event:', error);
-                alert('Failed to cancel event. Please try again.');
-            });
+        cells[0].innerHTML = `<input type="text" value="${escapeHtml(originalValues.name)}">`;
+        cells[1].innerHTML = `<input type="date" value="${formatInputDate(originalValues.date)}">`;
+        cells[2].innerHTML = `<input type="text" value="${escapeHtml(originalValues.location)}">`;
+        cells[3].innerHTML = `<textarea>${escapeHtml(originalValues.description)}</textarea>`;
+        
+        eventRow.querySelector('td:last-child').innerHTML = `
+            <button onclick="saveEdit(${eventId})">Save</button>
+            <button onclick="cancelEdit(${eventId}, ${escapeHtml(JSON.stringify(originalValues))})">Cancel</button>
+        `;
+        
+        editingEventId = eventId;
+    } catch (error) {
+        console.error('Error starting edit:', error);
+        alert('Failed to start editing. Please try again.');
     }
 }
 
-// Function to add a new event
-document.getElementById('add-event-form').addEventListener('submit', function (event) {
-    event.preventDefault(); // Prevent the form from submitting the traditional way
+// Save edited event
+function saveEdit(eventId) {
+    try {
+        const eventRow = document.getElementById(`event-${eventId}`);
+        if (!eventRow) throw new Error('Event row not found');
+        
+        const inputs = eventRow.querySelectorAll('input, textarea');
+        const updatedEvent = {
+            id: eventId,
+            name: inputs[0].value.trim(),
+            date: inputs[1].value,
+            location: inputs[2].value.trim(),
+            description: inputs[3].value.trim()
+        };
 
-    const eventName = document.getElementById('event-name').value;
-    const eventDate = document.getElementById('event-date').value;
-    const eventLocation = document.getElementById('event-location').value;
-    const eventDescription = document.getElementById('event-description').value;
-    const autoApproveDL = document.getElementById('auto-approve-dl').checked;
+        if (!updatedEvent.name || !updatedEvent.date) {
+            throw new Error('Event name and date are required');
+        }
 
-    const newEvent = {
-        name: eventName,
-        date: eventDate,
-        location: eventLocation,
-        description: eventDescription,
-        auto_approve_dl: autoApproveDL, // Include the auto-approval flag
-    };
+        fetch(`http://localhost/event-management-php/api/events.php`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updatedEvent)
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.json();
+        })
+        .then(() => displayEvents())
+        .catch(error => {
+            console.error('Error saving event:', error);
+            alert('Failed to save changes. Please try again.');
+        });
+    } catch (error) {
+        console.error('Error in saveEdit:', error);
+        alert(error.message);
+    }
+}
 
-    fetch('http://localhost/event-management-php/api/events.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newEvent),
-    })
+// Cancel editing
+function cancelEdit(eventId, originalValuesJson) {
+    try {
+        const originalValues = JSON.parse(originalValuesJson);
+        const eventRow = document.getElementById(`event-${eventId}`);
+        if (!eventRow) throw new Error('Event row not found');
+        
+        const cells = eventRow.querySelectorAll('td:not(:last-child)');
+        cells[0].textContent = originalValues.name;
+        cells[1].textContent = originalValues.date;
+        cells[2].textContent = originalValues.location;
+        cells[3].textContent = originalValues.description;
+        
+        eventRow.querySelector('td:last-child').innerHTML = `
+            <button onclick="startEdit(${eventId})">Edit</button>
+            <button onclick="cancelEvent(${eventId})">Cancel</button>
+        `;
+        
+        editingEventId = null;
+    } catch (error) {
+        console.error('Error canceling edit:', error);
+        displayEvents(); // Fallback to refresh the view
+    }
+}
+
+// Cancel an event
+function cancelEvent(eventId) {
+    if (confirm('Are you sure you want to permanently delete this event?')) {
+        fetch(`http://localhost/event-management-php/api/events.php`, {
+            method: 'DELETE',
+            headers: { 
+                'Content-Type': 'application/json'
+                // Remove Authorization header if you're not using it
+            },
+            body: JSON.stringify({ id: eventId }),
+            credentials: 'include'  // Add this if using session cookies
+        })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                return response.text().then(text => {
+                    throw new Error(text || 'Failed to delete event');
+                });
             }
             return response.json();
         })
         .then(data => {
-            if (data.status === 'success') {
-                displayEvents(); // Refresh the event list
-                document.getElementById('add-event-form').reset(); // Clear the form
-            } else {
-                alert('Error adding event: ' + data.message);
-            }
+            showNotification('Event deleted successfully', 'success');
+            displayEvents();
+        })
+        .catch(error => {
+            console.error('Delete error:', error);
+            showNotification(error.message || 'Failed to delete event', 'error');
+        });
+    }
+}
+
+// Add this helper function (at top of file)
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+// Add new event
+document.getElementById('add-event-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    try {
+        const newEvent = {
+            name: document.getElementById('event-name').value.trim(),
+            date: document.getElementById('event-date').value,
+            location: document.getElementById('event-location').value.trim(),
+            description: document.getElementById('event-description').value.trim()
+        };
+
+        if (!newEvent.name || !newEvent.date) {
+            throw new Error('Event name and date are required');
+        }
+
+        fetch('http://localhost/event-management-php/api/events.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newEvent)
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            displayEvents();
+            this.reset();
         })
         .catch(error => {
             console.error('Error adding event:', error);
             alert('Failed to add event. Please try again.');
         });
+    } catch (error) {
+        alert(error.message);
+    }
 });
 
-// Initialize the admin dashboard
+// Initialize
 document.addEventListener('DOMContentLoaded', () => {
     displayEvents();
 });

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Rectifications</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>My Rectification Requests</h1>
+        <nav>
+            <ul>
+                <li><a href="student.html">My Events</a></li>
+                <li><a href="attendance.html">My Attendance</a></li>
+                <li><a href="rectifications.html" class="active">Rectifications</a></li>
+            </ul>
+        </nav>
+        <div class="profile-icon-container">
+            <div class="profile-icon" onclick="toggleProfileDropdown()">
+                <span>👤</span>
+            </div>
+            <div class="profile-dropdown" id="profile-dropdown">
+                <p>Welcome, <span id="user-role">Student</span>!</p>
+                <button onclick="viewProfile()">View Profile</button>
+                <button onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="rectifications-container">
+            <div class="controls">
+                <select id="status-filter">
+                    <option value="all">All Statuses</option>
+                    <option value="pending">Pending</option>
+                    <option value="approved">Approved</option>
+                    <option value="rejected">Rejected</option>
+                </select>
+                <button id="refresh-btn">Refresh</button>
+            </div>
+            
+            <div class="rectifications-table-container">
+                <table id="rectifications-table">
+                    <thead>
+                        <tr>
+                            <th>Event</th>
+                            <th>Date Submitted</th>
+                            <th>Status</th>
+                            <th>Reason</th>
+                            <th>Evidence</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Will be populated by JavaScript -->
+                        <tr class="loading-row">
+                            <td colspan="5">Loading rectifications...</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p id="no-rectifications-message" class="no-records">No rectification requests found</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2025 College Event Management System</p>
+    </footer>
+
+    <!-- Evidence Modal -->
+    <div id="evidence-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h3>Evidence</h3>
+            <div id="evidence-content"></div>
+        </div>
+    </div>
+
+    <script src="js/rectifications.js"></script>
+</body>
+</html>

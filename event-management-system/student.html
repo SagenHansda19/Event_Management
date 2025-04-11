@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Student Dashboard</h1>
+        <nav>
+            <ul>
+                <li><a href="student.html">My Events</a></li>
+                <li><a href="attendance.html">My Attendance</a></li>
+                <li><a href="rectifications.html">Rectifications</a></li>
+            </ul>
+        </nav>
+        <div class="profile-icon-container">
+            <div class="profile-icon" onclick="toggleProfileDropdown()">
+                <span>👤</span>
+            </div>
+            <div class="profile-dropdown" id="profile-dropdown">
+                <p>Welcome, <span id="user-role">Student</span>!</p>
+                <button onclick="viewProfile()">View Profile</button>
+                <button onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Available Events Section -->
+        <div class="events-section">
+            <h2>Available Events</h2>
+            <div class="events-grid" id="available-events-grid"></div>
+            <!-- <p id="no-available-events" class="no-events">No upcoming events available</p> -->
+        </div>
+
+        <!-- Registered Events Section -->
+        <div class="events-section">
+            <h2>My Registered Events</h2>
+            <div class="events-grid" id="registered-events-grid"></div>
+            <p id="no-registered-events" class="no-events">You have no registered events</p>
+        </div>
+
+        <!-- Rectification Section -->
+        <!-- <div class="events-section">
+            <h2>Rectification Requests</h2>
+            <table id="rectification-table">
+                <thead>
+                    <tr>
+                        <th>Event Name</th>
+                        <th>Event Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <p id="no-rectification-message" class="no-events">No rectification requests needed</p>
+        </div> -->
+    </main>
+
+    <footer>
+        <p>© 2025 College Event Management System</p>
+    </footer>
+
+    <!-- Registration Modal -->
+    <div id="registration-modal" class="modal">
+        <div class="modal-content">
+            <h3>Select Participation Type</h3>
+            <select id="role-select">
+                <option value="participant">Participant</option>
+                <option value="volunteer">Volunteer</option>
+            </select>
+            <div class="modal-actions">
+                <button onclick="confirmRegistration()">Confirm</button>
+                <button onclick="cancelRegistration()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/student.js"></script>
+</body>
+</html>

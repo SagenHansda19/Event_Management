@@ -1,68 +1,100 @@
-document.getElementById('login-form').addEventListener('submit', function(event) {
-    event.preventDefault();
-
-    // Clear previous error messages
-    document.getElementById('error-message').textContent = '';
-
-    // Get and sanitize input values
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value.trim();
-
-    // Validate input fields
-    if (!username || !password) {
-        document.getElementById('error-message').textContent = 'Username and password are required';
+document.addEventListener('DOMContentLoaded', () => {
+    const loginForm = document.getElementById('login-form');
+    
+    if (!loginForm) {
+        console.error('Login form not found!');
         return;
     }
 
-    // API URL
-    const API_URL = 'http://localhost/event-management-php/api/auth.php';
+    loginForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        document.getElementById('error-message').textContent = '';
 
-    // Send login request
-    fetch(API_URL, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ username, password })
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value.trim();
+
+        if (!username || !password) {
+            showError('Username and password are required');
+            return;
         }
-        return response.json();
-    })
-    .then(data => {
-        if (data.success) {
-            // Save user data to localStorage
-            localStorage.setItem('currentUser', JSON.stringify({ username, role: data.role }));
-            // Redirect based on role
-            redirectBasedOnRole(data.role);
-        } else {
-            // Display error message
-            document.getElementById('error-message').textContent = data.error || 'Invalid username or password';
-        }
-    })
-    .catch(error => {
-        console.error('Error during login:', error);
-        document.getElementById('error-message').textContent = error.message || 'An error occurred during login. Please try again.';
+
+        authenticateUser(username, password);
     });
 });
 
-function redirectBasedOnRole(role) {
-    switch (role) {
-        case 'admin':
-            window.location.href = 'admin.html';
-            break;
-        case 'faculty':
-            window.location.href = 'faculty.html';
-            break;
-        case 'participant':
-            window.location.href = 'participant.html';
-            break;
-        case 'volunteer':
-            window.location.href = 'volunteer.html';
-            break;
-        default:
-            window.location.href = 'index.html';
+async function authenticateUser(username, password) {
+    const API_URL = 'http://localhost/event-management-php/api/auth.php';
+    
+    try {
+        console.log('Starting authentication for:', username);
+        
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password }),
+            credentials: 'include'
+        });
+
+        console.log('Auth response status:', response.status);
+        
+        const data = await response.json();
+        console.log('Auth response data:', data);
+
+        if (!data.success) {
+            throw new Error(data.error || 'Authentication failed');
+        }
+
+        // Store minimal user data
+        localStorage.setItem('currentUser', JSON.stringify({
+            id: data.user_id,
+            username,
+            role: data.role
+        }));
+
+        console.log('Authentication successful, role:', data.role);
+        redirectBasedOnRole(data.role);
+
+    } catch (error) {
+        console.error('Authentication error:', error);
+        showError(error.message || 'Login failed. Please try again.');
     }
+}
+
+function handleResponse(response) {
+    if (!response.ok) {
+        return response.text().then(text => {
+            throw new Error(text || 'Network error');
+        });
+    }
+    return response.json();
+}
+
+function handleNetworkError(error) {
+    console.error('Login error:', error);
+    showError(error.message || 'Login failed. Please try again.');
+}
+
+function showError(message) {
+    const errorElement = document.getElementById('error-message');
+    if (errorElement) {
+        errorElement.textContent = message;
+    }
+}
+
+function redirectBasedOnRole(role) {
+    // Normalize role to lowercase
+    const normalizedRole = String(role).toLowerCase().trim();
+    console.log('Normalized role:', normalizedRole);
+
+    const roleMap = {
+        'admin': 'admin.html',
+        'faculty': 'faculty.html',
+        'participant': 'student.html',
+        'student': 'student.html',
+        'volunteer': 'student.html'
+    };
+
+    const targetPage = roleMap[normalizedRole] || 'index.html';
+    console.log('Redirecting to:', targetPage);
+    window.location.href = targetPage;
 }

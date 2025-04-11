@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Attendance</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>My Attendance</h1>
+        <nav>
+            <ul>
+                <li><a href="student.html">My Events</a></li>
+                <li><a href="attendance.html">My Attendance</a></li>
+                <li><a href="rectifications.html">Rectifications</a></li>
+            </ul>
+        </nav>
+        <div class="profile-icon-container">
+            <div class="profile-icon" onclick="toggleProfileDropdown()">
+                <span>👤</span>
+            </div>
+            <div class="profile-dropdown" id="profile-dropdown">
+                <p>Welcome, <span id="user-role">Student</span>!</p>
+                <button onclick="viewProfile()">View Profile</button>
+                <button onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="attendance-container">
+            <h2>Event Attendance Status</h2>
+            <table id="attendance-table">
+                <thead>
+                    <tr>
+                        <th>Event Name</th>
+                        <th>Date</th>
+                        <th>Attendance Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <p id="no-attendance-message">No attendance records found</p>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2025 College Event Management System</p>
+    </footer>
+
+    <script src="js/attendance.js"></script>
+</body>
+</html>

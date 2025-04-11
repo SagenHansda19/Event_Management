@@ -12,24 +12,22 @@
         <nav>
             <ul>
                 <li><a href="faculty.html">Attendance Management</a></li>
-                <!-- Remove the logout link from here -->
+                <li><a href="faculty_rectifications.html">Rectification Review</a></li>
             </ul>
         </nav>
-        <!-- User Profile Section -->
         <div class="profile-icon-container">
             <div class="profile-icon" onclick="toggleProfileDropdown()">
-                <span>👤</span> <!-- Replace with an actual profile icon or image -->
+                <span>👤</span>
             </div>
             <div class="profile-dropdown" id="profile-dropdown">
                 <p>Welcome, Faculty!</p>
                 <button onclick="viewProfile()">View Profile</button>
-                <button onclick="logout()">Logout</button> <!-- Logout button in the dropdown -->
+                <button onclick="logout()">Logout</button>
             </div>
         </div>
     </header>
 
     <main>
-        <!-- Attendance Management Section -->
         <div id="attendance-management">
             <h2>Attendance Management</h2>
 
@@ -37,74 +35,33 @@
                 <option value="">Select an Event</option>
             </select>
         
-            <!-- Dropdown to toggle between Participants and Volunteers -->
-            <div id="role-select" hidden>
+            <div id="role-select">
                 <label for="role-dropdown">View:</label>
                 <select id="role-dropdown">
-                    <option value="">Select Type</option>
-                    <option value="participant">Participants</option>
-                    <option value="volunteer">Volunteers</option>
-                </select>
+                    <option value="participants">Participants</option>
+                    <option value="volunteers">Volunteers</option>
+                </select>                
             </div>
         
-            <!-- Participants Table -->
-            <div id="participants-section" class="attendance-section">
-                <h3>Participants</h3>
-                <table id="participants-table">
+            <div class="attendance-table-container">
+                <table id="attendance-table">
                     <thead>
                         <tr>
                             <th>Name</th>
                             <th>Email</th>
-                            <th>Event Name</th>
-                            <th>Attendance</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        
-            <!-- Volunteers Table -->
-            <div id="volunteers-section" class="attendance-section">
-                <h3>Volunteers</h3>
-                <table id="volunteers-table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Event Name</th>
-                            <th>Attendance</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-
-            <!-- DL Requests Section -->
-            <div id="dl-requests">
-                <h2>Duty Leave Requests</h2>
-                <table id="dl-requests-table">
-                    <thead>
-                        <tr>
-                            <th>Event Name</th>
-                            <th>Student Name</th>
-                            <th>DL Code</th>
                             <th>Status</th>
-                            <th>Actions</th>
+                            <th>Attendance</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
                 </table>
-                <p id="no-dl-requests-message" style="display: none;">No duty leave requests found.</p>
             </div>
         
-            <!-- Buttons to mark all as Present or Absent -->
-            <div id="attendance-buttons">
+            <div class="attendance-actions">
                 <button id="mark-all-present">Mark All Present</button>
                 <button id="mark-all-absent">Mark All Absent</button>
+                <button id="submit-attendance">Submit Attendance</button>
             </div>
-        
-            <!-- Submit Attendance Button -->
-            <button id="submit-attendance">Submit Attendance</button>
         </div>
     </main>
 
@@ -112,12 +69,11 @@
         <p>© 2025 College Event Management System</p>
     </footer>
 
-    <!-- Confirmation Modal -->
     <div id="confirmation-modal" class="modal">
         <div class="modal-content">
-            <p>Do you want to submit the attendance?</p>
+            <p>Confirm attendance submission?</p>
             <div class="modal-buttons">
-                <button id="confirm-submit">Yes, Submit</button>
+                <button id="confirm-submit">Submit</button>
                 <button id="cancel-submit">Cancel</button>
             </div>
         </div>
