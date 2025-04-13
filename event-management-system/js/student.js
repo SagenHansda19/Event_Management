@@ -41,6 +41,8 @@ async function loadUserData() {
     try {
         console.log('Checking user session...');
         
+        const localUser = JSON.parse(localStorage.getItem('currentUser'));
+
         const response = await fetch(`${API_BASE}/get_user.php`, {
             credentials: 'include'
         });
@@ -69,6 +71,9 @@ async function loadUserData() {
         
         const displayRole = roleDisplayMap[data.user.role.toLowerCase()] || data.user.role;
         document.getElementById('user-role').textContent = displayRole;
+
+        const userName = localUser?.name || data.user.name || data.user.username;
+        document.getElementById('user-name').textContent = userName;
 
         return data.user;
 

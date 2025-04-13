@@ -48,7 +48,8 @@ async function authenticateUser(username, password) {
         localStorage.setItem('currentUser', JSON.stringify({
             id: data.user_id,
             username,
-            role: data.role
+            role: data.role,
+            name: data.name 
         }));
 
         console.log('Authentication successful, role:', data.role);
