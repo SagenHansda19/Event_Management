@@ -15,6 +15,16 @@
                 <li><a href="login.html">Logout</a></li>
             </ul>
         </nav>
+        <div class="profile-icon-container">
+            <div class="profile-icon" onclick="toggleProfileDropdown()">
+                <span>👤</span>
+            </div>
+            <div class="profile-dropdown" id="profile-dropdown">
+                <p>Welcome, Faculty!</p>
+                <button onclick="viewProfile()">View Profile</button>
+                <button onclick="logout()">Logout</button>
+            </div>
+        </div>
     </header>
 
     <main>

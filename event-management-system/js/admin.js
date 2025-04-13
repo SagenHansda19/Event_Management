@@ -250,3 +250,37 @@ document.getElementById('add-event-form').addEventListener('submit', function(e)
 document.addEventListener('DOMContentLoaded', () => {
     displayEvents();
 });
+
+function escapeHtml(str) {
+    return str.toString()
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+}
+
+function showNotification(message, type) {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    setTimeout(() => notification.remove(), 3000);
+}
+
+// Profile functions
+function toggleProfileDropdown() {
+    document.getElementById('profile-dropdown').classList.toggle('active');
+}
+
+function viewProfile() {
+    // Implement profile viewing
+    window.location.href = 'profile.html';
+}
+
+function logout() {
+    fetch('http://localhost/event-management-php/api/logout.php', {
+        method: 'POST'
+    }).then(() => {
+        window.location.href = 'login.html';
+    });
+}
