@@ -1,3 +1,5 @@
+const API_BASE = 'http://localhost/event-management-php/api';
+
 let editingEventId = null;
 
 // Display all events in table
@@ -247,9 +249,55 @@ document.getElementById('add-event-form').addEventListener('submit', function(e)
 });
 
 // Initialize
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     displayEvents();
+    const user = await loadUserData();
 });
+
+async function loadUserData() {
+    try {
+        console.log('Checking user session...');
+        
+        const localUser = JSON.parse(localStorage.getItem('currentUser'));
+
+        const response = await fetch(`${API_BASE}/get_user.php`, {
+            credentials: 'include'
+        });
+        
+        console.log('Session check status:', response.status);
+        
+        if (response.status === 401) {
+            console.warn('Session expired, redirecting to login');
+            window.location.href = 'login.html';
+            return null;
+        }
+
+        const data = await response.json();
+        console.log('Session data:', data);
+
+        if (data.status !== 'success' || !data.user) {
+            throw new Error(data.message || 'Invalid session');
+        }
+
+        // Update UI with role
+        const roleDisplayMap = {
+            'admin': 'Admin',
+        };
+        
+        const displayRole = roleDisplayMap[data.user.role.toLowerCase()] || data.user.role;
+        document.getElementById('user-role').textContent = displayRole;
+
+        const userName = localUser?.name || data.user.name || data.user.username;
+        document.getElementById('user-name').textContent = userName;
+
+        return data.user;
+
+    } catch (error) {
+        console.error('Session check failed:', error);
+        window.location.href = 'login.html';
+        return null;
+    }
+}
 
 function escapeHtml(str) {
     return str.toString()
